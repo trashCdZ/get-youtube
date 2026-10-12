@@ -1,4 +1,75 @@
 const REPO_URL = 'https://github.com/flowseal/zapret-discord-youtube'
+const THEME_KEY = 'site-theme'
+
+const isLightTheme = () => document.documentElement.getAttribute('data-theme') === 'light'
+
+const getPreferredTheme = () => {
+  try {
+    const stored = window.localStorage.getItem(THEME_KEY)
+    if (stored === 'light' || stored === 'dark') return stored
+  } catch {
+    return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark'
+  }
+  if (window.matchMedia('(prefers-color-scheme: light)').matches) return 'light'
+  return 'dark'
+}
+
+const persistTheme = (value) => {
+  try {
+    window.localStorage.setItem(THEME_KEY, value)
+  } catch {
+    return
+  }
+}
+
+const applyTheme = (theme) => {
+  const next = theme === 'light' ? 'light' : 'dark'
+  document.documentElement.setAttribute('data-theme', next)
+  persistTheme(next)
+  const metaSync = document.getElementById('metaTheme')
+  if (metaSync) metaSync.setAttribute('content', next === 'light' ? '#EDF0F7' : '#0B1020')
+  const toggle = document.getElementById('themeToggle')
+  const iconSun = document.getElementById('themeIconSun')
+  const iconMoon = document.getElementById('themeIconMoon')
+  if (toggle) {
+    const light = next === 'light'
+    toggle.setAttribute('aria-pressed', String(light))
+    toggle.setAttribute('aria-label', light ? 'Переключить на тёмную тему' : 'Переключить на светлую тему')
+    toggle.setAttribute('title', light ? 'Переключить на тёмную тему' : 'Переключить на светлую тему')
+  }
+  if (iconSun) iconSun.classList.toggle('hidden', next !== 'light')
+  if (iconMoon) iconMoon.classList.toggle('hidden', next === 'light')
+  window.dispatchEvent(new CustomEvent('themechange', { detail: next }))
+  return next
+}
+
+const initTheme = () => {
+  applyTheme(getPreferredTheme())
+
+  const toggle = document.getElementById('themeToggle')
+  if (!toggle) return
+
+  const handleToggleTheme = () => {
+    applyTheme(isLightTheme() ? 'dark' : 'light')
+  }
+
+  toggle.addEventListener('click', handleToggleTheme)
+
+  try {
+    const media = window.matchMedia('(prefers-color-scheme: light)')
+    const handleMediaChange = (event) => {
+      try {
+        if (window.localStorage.getItem(THEME_KEY)) return
+      } catch {
+        return
+      }
+      applyTheme(event.matches ? 'light' : 'dark')
+    }
+    if (typeof media.addEventListener === 'function') media.addEventListener('change', handleMediaChange)
+  } catch {
+    return
+  }
+}
 
 const prefersReducedMotion = () =>
   window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -51,6 +122,7 @@ const initParticles = () => {
 
   const drawLinks = () => {
     if (!ctx) return
+    const light = isLightTheme()
     for (let i = 0; i < particles.length; i++) {
       const first = particles[i]
       if (!first) continue
@@ -61,8 +133,8 @@ const initParticles = () => {
         const dy = first.y - second.y
         const dist = Math.hypot(dx, dy)
         if (dist > 130) continue
-        const opacity = (1 - dist / 130) * 0.16
-        ctx.strokeStyle = `rgba(110, 160, 255, ${opacity})`
+        const opacity = (1 - dist / 130) * (light ? 0.22 : 0.16)
+        ctx.strokeStyle = light ? `rgba(37, 99, 235, ${opacity})` : `rgba(110, 160, 255, ${opacity})`
         ctx.lineWidth = 1
         ctx.beginPath()
         ctx.moveTo(first.x, first.y)
@@ -76,6 +148,7 @@ const initParticles = () => {
     if (!ctx) return
     ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
 
+    const light = isLightTheme()
     particles.forEach((item) => {
       item.x += item.vx
       item.y += item.vy
@@ -87,8 +160,8 @@ const initParticles = () => {
 
       ctx.beginPath()
       ctx.arc(item.x, item.y, item.radius, 0, Math.PI * 2)
-      ctx.fillStyle = `hsla(${item.hue}, 90%, 70%, ${item.alpha})`
-      ctx.shadowColor = `hsla(${item.hue}, 90%, 65%, 0.8)`
+      ctx.fillStyle = light ? `hsla(${item.hue}, 85%, 48%, ${item.alpha})` : `hsla(${item.hue}, 90%, 70%, ${item.alpha})`
+      ctx.shadowColor = light ? `hsla(${item.hue}, 85%, 45%, 0.5)` : `hsla(${item.hue}, 90%, 65%, 0.8)`
       ctx.shadowBlur = 8
       ctx.fill()
       ctx.shadowBlur = 0
@@ -365,13 +438,14 @@ const initSnakeGame = () => {
   const drawSnakeFrame = (now) => {
     const size = wrap.clientWidth
     if (!size) return
+    const light = isLightTheme()
     const cell = size / COLS
     ctx.clearRect(0, 0, size, size)
 
-    ctx.fillStyle = '#0A0F22'
+    ctx.fillStyle = light ? '#E9EDF5' : '#0A0F22'
     ctx.fillRect(0, 0, size, size)
 
-    ctx.strokeStyle = 'rgba(120, 150, 255, 0.08)'
+    ctx.strokeStyle = light ? 'rgba(22, 35, 63, 0.1)' : 'rgba(120, 150, 255, 0.08)'
     ctx.lineWidth = 1
     for (let i = 1; i < COLS; i++) {
       ctx.beginPath()
@@ -726,6 +800,7 @@ const initSnakeGame = () => {
     if (document.hidden && isRunning && !isPaused && !isOver) handleSnakePause()
   })
   window.addEventListener('resize', resizeSnakeCanvas, { passive: true })
+  window.addEventListener('themechange', () => drawSnakeFrame(Date.now()))
 
   updateScoreUI()
   syncSpeedButtons()
@@ -737,6 +812,7 @@ const initSnakeGame = () => {
 }
 
 const init = () => {
+  initTheme()
   initParticles()
   initReveal()
   initHeader()
