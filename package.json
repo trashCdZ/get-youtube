@@ -1,0 +1,16 @@
+{
+  "name": "get-youtube-main",
+  "version": "1.0.0",
+  "description": "Стабильный доступ к ютубу",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.64.0"
+  }
+}

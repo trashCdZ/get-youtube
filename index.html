@@ -80,6 +80,8 @@
 
         <ul class="hidden md:flex items-center gap-1 text-sm text-ice/70">
           <li><a href="#how" class="px-3 py-2 rounded-lg hover:text-white hover:bg-white/5 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent">Принцип работы</a></li>
+          <li><a href="#dpi" class="px-3 py-2 rounded-lg hover:text-white hover:bg-white/5 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent">Что такое DPI</a></li>
+          <li><a href="#faq" class="px-3 py-2 rounded-lg hover:text-white hover:bg-white/5 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent">Вопросы</a></li>
           <li><a href="#guide" class="px-3 py-2 rounded-lg hover:text-white hover:bg-white/5 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent">Методика</a></li>
           <li><a href="#game" class="px-3 py-2 rounded-lg hover:text-white hover:bg-white/5 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent">Змейка</a></li>
           <li><a href="#cta" class="px-3 py-2 rounded-lg hover:text-white hover:bg-white/5 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent">Репозиторий</a></li>
@@ -112,6 +114,8 @@
 
       <div id="mobileMenu" class="md:hidden hidden mt-2 glass rounded-2xl p-2 text-sm">
         <a href="#how" class="mobile-link block px-4 py-3 rounded-xl hover:bg-white/5">Принцип работы</a>
+        <a href="#dpi" class="mobile-link block px-4 py-3 rounded-xl hover:bg-white/5">Что такое DPI</a>
+        <a href="#faq" class="mobile-link block px-4 py-3 rounded-xl hover:bg-white/5">Вопросы и ответы</a>
         <a href="#guide" class="mobile-link block px-4 py-3 rounded-xl hover:bg-white/5">Методика</a>
         <a href="#game" class="mobile-link block px-4 py-3 rounded-xl hover:bg-white/5">Змейка 🐍</a>
         <a href="#cta" class="mobile-link block px-4 py-3 rounded-xl hover:bg-white/5">Репозиторий</a>
@@ -289,6 +293,219 @@
             <p class="mt-2.5 text-sm text-ice/60 leading-relaxed">Фиксируйте сетевые показатели стенда: задержку, пропускную способность и стабильность сессий — и сравнивайте профили между собой.</p>
             <span class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-emerald-300"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true"></span>Воспроизводимый эксперимент</span>
           </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- DPI DEEP DIVE -->
+    <section id="dpi" class="relative px-4 sm:px-6 lg:px-8 py-14 sm:py-20 scroll-mt-24" aria-labelledby="dpi-title">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center max-w-3xl mx-auto reveal">
+          <p class="section-tag">Deep Packet Inspection • теория</p>
+          <h2 id="dpi-title" class="font-display font-bold tracking-tight text-3xl sm:text-4xl lg:text-[2.75rem] leading-tight mt-4">Что такое <span class="text-gradient">DPI</span> и как он работает</h2>
+          <p class="mt-4 text-ice/60 leading-relaxed">DPI (Deep Packet Inspection) — технология глубокого анализа сетевых пакетов. Обычный firewall смотрит только на адреса и порты, а DPI заглядывает внутрь пакета: разбирает заголовки, определяет протокол и принимает решение — пропустить, замедлить или разорвать соединение.</p>
+        </div>
+
+        <div class="mt-10 sm:mt-12 grid lg:grid-cols-2 gap-4 sm:gap-5">
+          <article class="reveal glass card-hover rounded-3xl p-6 sm:p-8 relative overflow-hidden" tabindex="0" aria-label="DPI против обычного firewall">
+            <div class="card-shine" aria-hidden="true"></div>
+            <h3 class="font-display font-bold text-xl">Firewall vs DPI</h3>
+            <p class="mt-3 text-sm text-ice/60 leading-relaxed">Представьте почту: обычный firewall читает только конверт (откуда, куда, какой порт). DPI вскрывает структуру письма: какой это протокол, какое имя сервера внутри TLS-рукопожатия, какой тип трафика — видео, звонок или файл.</p>
+            <div class="mt-5 grid sm:grid-cols-2 gap-3 text-[13px]">
+              <div class="glass-soft rounded-2xl p-4">
+                <p class="font-mono text-[11px] uppercase tracking-widest text-ice/45">Обычный фильтр L3 / L4</p>
+                <ul class="mt-2 space-y-1.5 text-ice/70">
+                  <li>• IP-адрес источника и назначения</li>
+                  <li>• TCP / UDP порт</li>
+                  <li>• Флаги и размер пакета</li>
+                </ul>
+              </div>
+              <div class="rounded-2xl p-4 bg-gradient-to-br from-accent/15 to-violet2/15 border border-accent/30">
+                <p class="font-mono text-[11px] uppercase tracking-widest text-accent">DPI • уровень L7</p>
+                <ul class="mt-2 space-y-1.5 text-ice/80">
+                  <li>• SNI — имя сервера в TLS Hello</li>
+                  <li>• Тип протокола: TLS, QUIC, DNS</li>
+                  <li>• Поведение потока: длина, темп, паттерн</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="reveal glass card-hover rounded-3xl p-6 sm:p-8 relative overflow-hidden" data-delay="120" tabindex="0" aria-label="Уровни модели OSI">
+            <div class="card-shine" aria-hidden="true"></div>
+            <h3 class="font-display font-bold text-xl">Где в пакете прячутся подсказки</h3>
+            <p class="mt-3 text-sm text-ice/60 leading-relaxed">Нажмите на слой ниже — подсветится, какая часть пакета анализируется и что из неё извлекается. Всё это — открытые заголовки, а не содержимое переписки.</p>
+            <div class="mt-5 flex flex-wrap gap-2" role="group" aria-label="Слои пакета">
+              <button type="button" data-packet-tab="ip" class="packet-tab px-4 py-2.5 rounded-xl text-[13px] font-semibold bg-gradient-to-r from-accent/30 to-violet2/30 border border-accent/40 transition" aria-pressed="true">IP • L3</button>
+              <button type="button" data-packet-tab="tcp" class="packet-tab px-4 py-2.5 rounded-xl text-[13px] font-semibold glass-soft hover:bg-white/10 transition" aria-pressed="false">TCP / UDP • L4</button>
+              <button type="button" data-packet-tab="tls" class="packet-tab px-4 py-2.5 rounded-xl text-[13px] font-semibold glass-soft hover:bg-white/10 transition" aria-pressed="false">TLS Hello • L7</button>
+              <button type="button" data-packet-tab="dns" class="packet-tab px-4 py-2.5 rounded-xl text-[13px] font-semibold glass-soft hover:bg-white/10 transition" aria-pressed="false">DNS • QUIC</button>
+            </div>
+            <div class="mt-4 rounded-2xl bg-black/40 border border-white/10 p-4 font-mono text-[12px] sm:text-[13px] leading-relaxed min-h-[132px]">
+              <p id="packetVisual" class="text-ice/80">IPv4 <span class="text-ice/40">src 192.0.2.14 → dst 142.250.x.x</span> • TTL • протокол</p>
+              <p id="packetDesc" class="mt-2 text-ice/60 font-sans text-[13px] leading-relaxed">IP-заголовок всегда открыт: по адресу назначения DPI понимает, к какому дата-центру идёт поток, и может применять политику ко всей подсети сразу.</p>
+            </div>
+          </article>
+        </div>
+
+        <div class="mt-4 sm:mt-5 grid md:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5">
+          <article class="reveal glass card-hover rounded-3xl p-6 relative overflow-hidden" tabindex="0" aria-label="SNI фильтрация">
+            <span class="card-num" aria-hidden="true">SNI</span>
+            <div class="card-shine" aria-hidden="true"></div>
+            <div class="w-11 h-11 rounded-2xl grid place-items-center bg-gradient-to-br from-accent/25 to-violet2/25 border border-accent/25 text-xl mb-4" aria-hidden="true">🔍</div>
+            <h3 class="font-display font-bold">SNI-фильтрация</h3>
+            <p class="mt-2 text-[13px] text-ice/60 leading-relaxed">При установке HTTPS-соединения браузер в открытом виде передаёт имя сервера (Server Name Indication), например <code class="code">*.googlevideo.com</code>. DPI читает это поле в ClientHello и решает судьбу сессии ещё до начала видео.</p>
+            <p class="mt-3 text-[12px] font-mono text-ice/45">ClientHello → SNI → policy match</p>
+          </article>
+          <article class="reveal glass card-hover rounded-3xl p-6 relative overflow-hidden" data-delay="80" tabindex="0" aria-label="Блокировка по IP">
+            <span class="card-num" aria-hidden="true">IP</span>
+            <div class="card-shine" aria-hidden="true"></div>
+            <div class="w-11 h-11 rounded-2xl grid place-items-center bg-gradient-to-br from-violet2/25 to-accent/25 border border-violet2/30 text-xl mb-4" aria-hidden="true">🌐</div>
+            <h3 class="font-display font-bold">Блокировка по IP</h3>
+            <p class="mt-2 text-[13px] text-ice/60 leading-relaxed">Самый грубый метод: целые диапазоны адресов дата-центров вносятся в списки. Страдает и смежный трафик — один IP может обслуживать десятки сервисов одновременно.</p>
+            <p class="mt-3 text-[12px] font-mono text-ice/45">drop / reject по подсети</p>
+          </article>
+          <article class="reveal glass card-hover rounded-3xl p-6 relative overflow-hidden" data-delay="160" tabindex="0" aria-label="Троттлинг скорости">
+            <span class="card-num" aria-hidden="true">⏱</span>
+            <div class="card-shine" aria-hidden="true"></div>
+            <div class="w-11 h-11 rounded-2xl grid place-items-center bg-gradient-to-br from-amber-400/20 to-accent/20 border border-amber-300/25 text-xl mb-4" aria-hidden="true">🐢</div>
+            <h3 class="font-display font-bold">Троттлинг</h3>
+            <p class="mt-2 text-[13px] text-ice/60 leading-relaxed">Соединение не рвётся, а искусственно замедляется: пакеты задерживаются или отбрасываются частично. Внешне это выглядит как бесконечная буферизация и падение качества до 144p.</p>
+            <p class="mt-3 text-[12px] font-mono text-ice/45">bandwidth shaping • queue delay</p>
+          </article>
+          <article class="reveal glass card-hover rounded-3xl p-6 relative overflow-hidden" data-delay="240" tabindex="0" aria-label="Разрыв сессий и подмена DNS">
+            <span class="card-num" aria-hidden="true">RST</span>
+            <div class="card-shine" aria-hidden="true"></div>
+            <div class="w-11 h-11 rounded-2xl grid place-items-center bg-gradient-to-br from-red-400/20 to-violet2/20 border border-red-400/25 text-xl mb-4" aria-hidden="true">✂</div>
+            <h3 class="font-display font-bold">RST и DNS</h3>
+            <p class="mt-2 text-[13px] text-ice/60 leading-relaxed">Активные методы: вброс поддельных TCP RST-пакетов для обрыва сессии и подмена DNS-ответов, когда вместо реального адреса возвращается заглушка.</p>
+            <p class="mt-3 text-[12px] font-mono text-ice/45">RST injection • DNS spoofing</p>
+          </article>
+        </div>
+
+        <div class="mt-4 sm:mt-5 grid lg:grid-cols-[1.1fr_0.9fr] gap-4 sm:gap-5">
+          <div class="reveal glass rounded-3xl p-6 sm:p-8 overflow-hidden">
+            <h3 class="font-display font-bold text-xl">Что видит провайдер: разбор потока YouTube</h3>
+            <p class="mt-2 text-sm text-ice/60">Упрощённая схема. Содержимое видео зашифровано, но метаданные соединения открыты.</p>
+            <div class="mt-5 overflow-x-auto -mx-2 px-2">
+              <table class="dpi-table w-full text-left text-[13px] min-w-[560px]">
+                <thead>
+                  <tr>
+                    <th scope="col">Этап соединения</th>
+                    <th scope="col">Что открыто для DPI</th>
+                    <th scope="col">Что закрыто</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><b>DNS-запрос</b><span>куда идём</span></td>
+                    <td>Имя домена (без ECH / DoH)</td>
+                    <td class="dim">—</td>
+                  </tr>
+                  <tr>
+                    <td><b>TLS ClientHello</b><span>рукопожатие</span></td>
+                    <td>SNI: googlevideo.com, версия TLS</td>
+                    <td class="dim">Ключи сессии</td>
+                  </tr>
+                  <tr>
+                    <td><b>Поток данных</b><span>видео</span></td>
+                    <td>IP, объём, ритм пакетов, QUIC / TCP</td>
+                    <td class="dim">Само видео, комментарии</td>
+                  </tr>
+                  <tr>
+                    <td><b>Поведение</b><span>паттерн</span></td>
+                    <td>Длинная сессия с ровным трафиком = стрим</td>
+                    <td class="dim">Какой ролик смотрят</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="reveal glass rounded-3xl p-6 sm:p-8" data-delay="120">
+            <h3 class="font-display font-bold text-xl">Как исследователи фиксируют признаки DPI</h3>
+            <p class="mt-2 text-sm text-ice/60">Только пассивные замеры — без вмешательства в чужие сети.</p>
+            <div class="mt-5" role="tablist" aria-label="Методы измерения">
+              <div class="flex flex-wrap gap-2">
+                <button type="button" data-dpi-tab="speed" class="dpi-tab px-4 py-2.5 rounded-xl text-[13px] font-semibold bg-gradient-to-r from-accent/30 to-violet2/30 border border-accent/40 transition" role="tab" aria-selected="true" aria-controls="dpi-panel">Скорость</button>
+                <button type="button" data-dpi-tab="latency" class="dpi-tab px-4 py-2.5 rounded-xl text-[13px] font-semibold glass-soft hover:bg-white/10 transition" role="tab" aria-selected="false" aria-controls="dpi-panel">Задержка</button>
+                <button type="button" data-dpi-tab="proto" class="dpi-tab px-4 py-2.5 rounded-xl text-[13px] font-semibold glass-soft hover:bg-white/10 transition" role="tab" aria-selected="false" aria-controls="dpi-panel">Протоколы</button>
+              </div>
+              <div id="dpi-panel" role="tabpanel" class="mt-4 rounded-2xl bg-black/40 border border-white/10 p-4 sm:p-5 min-h-[148px]">
+                <p id="dpiTabTitle" class="font-display font-bold text-[15px]">Сравнение скорости по направлениям</p>
+                <p id="dpiTabText" class="mt-2 text-[13px] text-ice/60 leading-relaxed">Замеряют пропускную способность до разных узлов: если общая скорость 100 Мбит/с, а видеопоток стабильно упирается в 1–2 Мбит/с — это характерный признак селективного шейпинга, а не проблем с Wi-Fi.</p>
+                <p id="dpiTabMeta" class="mt-3 font-mono text-[12px] text-ice/45">speedtest • iperf • статистика буферизации плеера</p>
+              </div>
+            </div>
+            <p class="mt-4 text-[12px] text-ice/45 leading-relaxed">Инструменты наблюдателя: Wireshark для разбора ClientHello, traceroute / MTR для поиска точки деградации, журнал плеера (Stats for nerds) для фиксации разрешения и буфера.</p>
+          </div>
+        </div>
+
+        <div class="reveal mt-4 sm:mt-5 glass rounded-3xl px-6 py-5 flex flex-col md:flex-row items-start md:items-center gap-4">
+          <span class="shrink-0 w-11 h-11 rounded-2xl grid place-items-center bg-gradient-to-br from-emerald-400/20 to-accent/20 border border-emerald-400/25 text-xl" aria-hidden="true">🔬</span>
+          <p class="text-sm text-ice/65 leading-relaxed"><b class="text-white">Почему важно понимать DPI?</b> Без базовой теории любые замеры превращаются в магию. Понимание SNI, QUIC, троттлинга и RST помогает корректно ставить эксперимент, отличать перегрузку сети от фильтрации и грамотно описывать результаты наблюдений.</p>
+          <a href="#faq" class="md:ml-auto shrink-0 btn-ghost">Частые вопросы ↓</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="relative px-4 sm:px-6 lg:px-8 py-14 sm:py-20 scroll-mt-24" aria-labelledby="faq-title">
+      <div class="max-w-5xl mx-auto">
+        <div class="text-center max-w-2xl mx-auto reveal">
+          <p class="section-tag">FAQ • без мифов</p>
+          <h2 id="faq-title" class="font-display font-bold tracking-tight text-3xl sm:text-4xl leading-tight mt-4">Частые вопросы <span class="text-gradient">про DPI</span></h2>
+          <p class="mt-4 text-ice/60">Короткие ответы на то, о чём спрашивают чаще всего. Нажмите на вопрос, чтобы раскрыть ответ.</p>
+        </div>
+        <div class="mt-10 sm:mt-12 space-y-3">
+          <details class="reveal faq-item glass rounded-2xl overflow-hidden group" name="dpi-faq">
+            <summary class="flex items-center gap-4 px-5 sm:px-6 py-4 sm:py-5 cursor-pointer list-none font-semibold text-[15px] hover:bg-white/[0.04] transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent rounded-2xl" tabindex="0" aria-label="DPI видит, какое видео я смотрю?">
+              <span class="shrink-0 w-9 h-9 rounded-xl grid place-items-center bg-gradient-to-br from-accent/25 to-violet2/25 border border-accent/25" aria-hidden="true">👁</span>
+              <span class="flex-1">DPI видит, какое видео я смотрю?</span>
+              <span class="faq-chevron shrink-0 text-accent font-bold text-lg transition-transform" aria-hidden="true">+</span>
+            </summary>
+            <div class="px-5 sm:px-6 pb-5 sm:pb-6 pl-[4.5rem] sm:pl-[4.75rem] text-sm text-ice/60 leading-relaxed">Нет. Содержимое HTTPS и QUIC зашифровано: название ролика, комментарии и аккаунт не видны. Виден лишь факт соединения с видеохостингом, объём переданных данных, ритм пакетов и имя сервера (SNI). Именно поэтому фильтрация работает по признакам потока, а не по конкретному видео.</div>
+          </details>
+          <details class="reveal faq-item glass rounded-2xl overflow-hidden group" data-delay="60" name="dpi-faq">
+            <summary class="flex items-center gap-4 px-5 sm:px-6 py-4 sm:py-5 cursor-pointer list-none font-semibold text-[15px] hover:bg-white/[0.04] transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent rounded-2xl" tabindex="0" aria-label="Что такое SNI и при чём тут ECH?">
+              <span class="shrink-0 w-9 h-9 rounded-xl grid place-items-center bg-gradient-to-br from-violet2/25 to-accent/25 border border-violet2/30" aria-hidden="true">✉</span>
+              <span class="flex-1">Что такое SNI и при чём тут ECH?</span>
+              <span class="faq-chevron shrink-0 text-accent font-bold text-lg transition-transform" aria-hidden="true">+</span>
+            </summary>
+            <div class="px-5 sm:px-6 pb-5 sm:pb-6 pl-[4.5rem] sm:pl-[4.75rem] text-sm text-ice/60 leading-relaxed">SNI (Server Name Indication) — открытое поле в начале TLS-соединения, где браузер называет нужный сервер. ECH (Encrypted Client Hello) — новая технология, прячущая это имя внутри шифра. Пока ECH поддерживается не везде, поэтому SNI остаётся главным маркером для классификации трафика в исследованиях.</div>
+          </details>
+          <details class="reveal faq-item glass rounded-2xl overflow-hidden group" data-delay="120" name="dpi-faq">
+            <summary class="flex items-center gap-4 px-5 sm:px-6 py-4 sm:py-5 cursor-pointer list-none font-semibold text-[15px] hover:bg-white/[0.04] transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent rounded-2xl" tabindex="0" aria-label="Чем замедление отличается от блокировки?">
+              <span class="shrink-0 w-9 h-9 rounded-xl grid place-items-center bg-gradient-to-br from-amber-400/20 to-accent/20 border border-amber-300/25" aria-hidden="true">🐢</span>
+              <span class="flex-1">Чем замедление отличается от блокировки?</span>
+              <span class="faq-chevron shrink-0 text-accent font-bold text-lg transition-transform" aria-hidden="true">+</span>
+            </summary>
+            <div class="px-5 sm:px-6 pb-5 sm:pb-6 pl-[4.5rem] sm:pl-[4.75rem] text-sm text-ice/60 leading-relaxed">Блокировка рвёт соединение сразу: страница не открывается, плеер показывает ошибку. Троттлинг мягче — соединение живёт, но скорость режется до уровня, на котором видео не успевает подгружаться. Диагностический признак: всё остальное летает, а один тип трафика стабильно деградирует в часы пик и вне их одинаково.</div>
+          </details>
+          <details class="reveal faq-item glass rounded-2xl overflow-hidden group" data-delay="180" name="dpi-faq">
+            <summary class="flex items-center gap-4 px-5 sm:px-6 py-4 sm:py-5 cursor-pointer list-none font-semibold text-[15px] hover:bg-white/[0.04] transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent rounded-2xl" tabindex="0" aria-label="Что такое QUIC и почему его выделяют отдельно?">
+              <span class="shrink-0 w-9 h-9 rounded-xl grid place-items-center bg-gradient-to-br from-emerald-400/20 to-accent/20 border border-emerald-400/25" aria-hidden="true">⚡</span>
+              <span class="flex-1">Что такое QUIC и почему его выделяют отдельно?</span>
+              <span class="faq-chevron shrink-0 text-accent font-bold text-lg transition-transform" aria-hidden="true">+</span>
+            </summary>
+            <div class="px-5 sm:px-6 pb-5 sm:pb-6 pl-[4.5rem] sm:pl-[4.75rem] text-sm text-ice/60 leading-relaxed">QUIC — транспортный протокол поверх UDP, на котором работают YouTube и другие видеосервисы. Он быстрее устанавливает соединение и лучше переживает потери пакетов, но имеет узнаваемый почерк. Поэтому в сетевых исследованиях QUIC и классический TCP/TLS замеряют раздельно и сравнивают между собой.</div>
+          </details>
+          <details class="reveal faq-item glass rounded-2xl overflow-hidden group" data-delay="240" name="dpi-faq">
+            <summary class="flex items-center gap-4 px-5 sm:px-6 py-4 sm:py-5 cursor-pointer list-none font-semibold text-[15px] hover:bg-white/[0.04] transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent rounded-2xl" tabindex="0" aria-label="Почему у соседнего провайдера всё иначе?">
+              <span class="shrink-0 w-9 h-9 rounded-xl grid place-items-center bg-gradient-to-br from-accent/25 to-violet2/25 border border-accent/25" aria-hidden="true">🗺</span>
+              <span class="flex-1">Почему у соседнего провайдера всё иначе?</span>
+              <span class="faq-chevron shrink-0 text-accent font-bold text-lg transition-transform" aria-hidden="true">+</span>
+            </summary>
+            <div class="px-5 sm:px-6 pb-5 sm:pb-6 pl-[4.5rem] sm:pl-[4.75rem] text-sm text-ice/60 leading-relaxed">Политики фильтрации, оборудование и маршруты различаются от сети к сети и от региона к региону. Один и тот же видеопоток может идти через разные вышестоящие операторы и точки обмена трафиком. Поэтому корректный вывод делается только по серии замеров в одной сети, а не по одиночному сравнению «у друга работает».</div>
+          </details>
+          <details class="reveal faq-item glass rounded-2xl overflow-hidden group" data-delay="300" name="dpi-faq">
+            <summary class="flex items-center gap-4 px-5 sm:px-6 py-4 sm:py-5 cursor-pointer list-none font-semibold text-[15px] hover:bg-white/[0.04] transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent rounded-2xl" tabindex="0" aria-label="Легально ли изучать DPI?">
+              <span class="shrink-0 w-9 h-9 rounded-xl grid place-items-center bg-gradient-to-br from-violet2/25 to-accent/25 border border-violet2/30" aria-hidden="true">⚖</span>
+              <span class="flex-1">Легально ли изучать DPI?</span>
+              <span class="faq-chevron shrink-0 text-accent font-bold text-lg transition-transform" aria-hidden="true">+</span>
+            </summary>
+            <div class="px-5 sm:px-6 pb-5 sm:pb-6 pl-[4.5rem] sm:pl-[4.75rem] text-sm text-ice/60 leading-relaxed">Само изучение открытых публикаций, RFC, анализ собственного трафика через Wireshark и замеры скорости — легальная исследовательская практика. Нарушением может стать попытка вмешательства в чужие сети или обход ограничений в нарушение закона вашей страны. Всегда сверяйтесь с разделом <a href="#legal" class="text-accent hover:text-white transition font-semibold">правовой информации</a> и документацией официальных источников.</div>
+          </details>
         </div>
       </div>
     </section>

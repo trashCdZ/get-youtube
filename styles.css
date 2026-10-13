@@ -328,6 +328,76 @@ body {
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 24px rgba(79, 140, 255, 0.12);
 }
 
+/* ---------- DPI / FAQ ---------- */
+.dpi-table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.dpi-table thead th {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(234, 242, 255, 0.45);
+  font-weight: 600;
+  padding: 0.6rem 0.9rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  white-space: nowrap;
+}
+.dpi-table tbody td {
+  padding: 0.85rem 0.9rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  color: rgba(234, 242, 255, 0.75);
+  vertical-align: top;
+}
+.dpi-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+.dpi-table tbody tr {
+  transition: background 0.25s;
+}
+.dpi-table tbody tr:hover {
+  background: rgba(79, 140, 255, 0.07);
+}
+.dpi-table tbody td b {
+  display: block;
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+}
+.dpi-table tbody td span {
+  display: block;
+  font-family: ui-monospace, monospace;
+  font-size: 11px;
+  color: rgba(234, 242, 255, 0.45);
+  margin-top: 2px;
+}
+.dpi-table tbody td.dim {
+  color: rgba(234, 242, 255, 0.35);
+  font-style: italic;
+}
+
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+.faq-item summary::marker {
+  content: "";
+}
+.faq-item[open] {
+  border-color: rgba(120, 165, 255, 0.35);
+  box-shadow: 0 18px 60px rgba(79, 140, 255, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+.faq-item[open] .faq-chevron {
+  transform: rotate(45deg);
+}
+
+.packet-tab[aria-pressed="true"],
+.dpi-tab[aria-selected="true"] {
+  background: linear-gradient(135deg, rgba(79, 140, 255, 0.3), rgba(138, 92, 255, 0.3));
+  border: 1px solid rgba(79, 140, 255, 0.4);
+  color: #fff;
+}
+
 /* ---------- Snake ---------- */
 #snakeWrap {
   touch-action: none;
@@ -538,6 +608,21 @@ html[data-theme="light"] .card-hover:focus {
 
 html[data-theme="light"] #themeToggle:hover {
   background-color: rgba(22, 35, 63, 0.08) !important;
+}
+
+html[data-theme="light"] .dpi-table thead th {
+  color: #67748E;
+  border-bottom-color: rgba(22, 35, 63, 0.12);
+}
+html[data-theme="light"] .dpi-table tbody td {
+  color: #45536F;
+  border-bottom-color: rgba(22, 35, 63, 0.08);
+}
+html[data-theme="light"] .dpi-table tbody td b {
+  color: #16233F;
+}
+html[data-theme="light"] .dpi-table tbody td span {
+  color: #67748E;
 }
 
 /* ---------- Keyframes ---------- */

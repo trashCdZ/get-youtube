@@ -811,6 +811,137 @@ const initSnakeGame = () => {
   resizeSnakeCanvas()
 }
 
+const dpiTabContent = {
+  speed: {
+    title: 'Сравнение скорости по направлениям',
+    text: 'Замеряют пропускную способность до разных узлов: если общая скорость 100 Мбит/с, а видеопоток стабильно упирается в 1–2 Мбит/с — это характерный признак селективного шейпинга, а не проблем с Wi-Fi.',
+    meta: 'speedtest • iperf • статистика буферизации плеера'
+  },
+  latency: {
+    title: 'Задержка и потери как маркеры',
+    text: 'Замеряют RTT, jitter и потери до видеоузлов и до нейтральных хостов. Резкий рост задержки только на одном направлении при чистом общем маршруте указывает на точку искусственной деградации.',
+    meta: 'ping • MTR • traceroute • Stats for nerds'
+  },
+  proto: {
+    title: 'Сравнение протоколов между собой',
+    text: 'Раздельно тестируют TCP/TLS и QUIC поверх UDP: если один транспорт деградирует, а второй в той же сети стабилен — это поведенческий отпечаток фильтрации, а не перегрузки канала.',
+    meta: 'Wireshark • ClientHello • QUIC handshake'
+  }
+}
+
+const packetContent = {
+  ip: {
+    visual: 'IPv4 src 192.0.2.14 → dst 142.250.x.x • TTL • протокол',
+    desc: 'IP-заголовок всегда открыт: по адресу назначения DPI понимает, к какому дата-центру идёт поток, и может применять политику ко всей подсети сразу.'
+  },
+  tcp: {
+    visual: 'TCP sport 52344 → dport 443 • seq • flags [SYN, ACK] • window',
+    desc: 'Порты и флаги выдают тип сервиса: 443 — защищённый веб и видео, 80 — открытый HTTP. По размеру окна и темпу пакетов DPI отличает стрим от обычного сёрфинга.'
+  },
+  tls: {
+    visual: 'TLS ClientHello → SNI = *.googlevideo.com • ALPN h2, http/1.1',
+    desc: 'Главное поле для классификации: имя сервера передаётся openly до установки шифра. Именно SNI позволяет точечно выделять видеопоток среди прочего HTTPS.'
+  },
+  dns: {
+    visual: 'DNS A rr1.googlevideo.com → 142.250.x.x • QUIC UDP/443 Initial',
+    desc: 'DNS-запросы и QUIC-рукопожатия тоже несут маркеры. Шифрование DNS (DoH/DoT) и ECH постепенно прячут эти подсказки — поэтому их выделяют в отдельный объект наблюдений.'
+  }
+}
+
+const syncTabButtons = (buttons, activeValue, activeClass) => {
+  buttons.forEach((btn) => {
+    const value = btn.getAttribute(activeClass)
+    const isActive = value === activeValue
+    if (activeClass === 'data-dpi-tab') btn.setAttribute('aria-selected', String(isActive))
+    if (activeClass === 'data-packet-tab') btn.setAttribute('aria-pressed', String(isActive))
+    if (isActive) {
+      btn.classList.remove('glass-soft')
+      return
+    }
+    btn.classList.add('glass-soft')
+  })
+}
+
+const initDpiTabs = () => {
+  const buttons = document.querySelectorAll('[data-dpi-tab]')
+  const title = document.getElementById('dpiTabTitle')
+  const text = document.getElementById('dpiTabText')
+  const meta = document.getElementById('dpiTabMeta')
+  if (!buttons.length || !title || !text || !meta) return
+
+  const handleSelectTab = (key) => {
+    const content = dpiTabContent[key]
+    if (!content) return
+    title.textContent = content.title
+    text.textContent = content.text
+    meta.textContent = content.meta
+    syncTabButtons(buttons, key, 'data-dpi-tab')
+  }
+
+  buttons.forEach((btn) => {
+    const key = btn.getAttribute('data-dpi-tab')
+    if (!key) return
+    const handleClick = () => handleSelectTab(key)
+    const handleKeyDown = (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ') return
+      event.preventDefault()
+      handleSelectTab(key)
+    }
+    btn.addEventListener('click', handleClick)
+    btn.addEventListener('keydown', handleKeyDown)
+  })
+}
+
+const initPacketExplorer = () => {
+  const buttons = document.querySelectorAll('[data-packet-tab]')
+  const visual = document.getElementById('packetVisual')
+  const desc = document.getElementById('packetDesc')
+  if (!buttons.length || !visual || !desc) return
+
+  const handleSelectPacket = (key) => {
+    const content = packetContent[key]
+    if (!content) return
+    visual.textContent = content.visual
+    desc.textContent = content.desc
+    syncTabButtons(buttons, key, 'data-packet-tab')
+  }
+
+  buttons.forEach((btn) => {
+    const key = btn.getAttribute('data-packet-tab')
+    if (!key) return
+    const handleClick = () => handleSelectPacket(key)
+    const handleKeyDown = (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ') return
+      event.preventDefault()
+      handleSelectPacket(key)
+    }
+    btn.addEventListener('click', handleClick)
+    btn.addEventListener('keydown', handleKeyDown)
+  })
+}
+
+const initFaq = () => {
+  const items = document.querySelectorAll('.faq-item')
+  if (!items.length) return
+
+  items.forEach((item) => {
+    const summary = item.querySelector('summary')
+    if (!summary) return
+    const handleKeyDown = (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ') return
+      if (event.target !== summary) return
+      event.preventDefault()
+      if (item.hasAttribute('open')) {
+        item.removeAttribute('open')
+        return
+      }
+      items.forEach((other) => other.removeAttribute('open'))
+      item.setAttribute('open', '')
+    }
+    summary.addEventListener('keydown', handleKeyDown)
+  })
+}
+
 const init = () => {
   initTheme()
   initParticles()
@@ -820,6 +951,9 @@ const init = () => {
   initParallaxTilt()
   initCopyLink()
   initYear()
+  initDpiTabs()
+  initPacketExplorer()
+  initFaq()
   initSnakeGame()
 }
 
